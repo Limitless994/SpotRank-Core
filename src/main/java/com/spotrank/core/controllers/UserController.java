@@ -1,49 +1,74 @@
 package com.spotrank.core.controllers;
 
 import com.spotrank.core.dtos.UserDto;
+import com.spotrank.core.mappers.UserMapper;
 import com.spotrank.core.models.User;
 import com.spotrank.core.repositories.UserRepository;
+import com.spotrank.core.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @GetMapping("{id}")
-    public User getById(@PathVariable("id") Long id) {
-        return this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
+    public ResponseEntity<UserDto> getById(@PathVariable("id") Long id) {
+        if(userService.existsById(id))
+            return new ResponseEntity<UserDto>(userService.findById(id), HttpStatus.OK);
+        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-    @GetMapping
-    public User getByEmail(@RequestParam(value = "email") String email) {
-        return this.userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
-
     @GetMapping("all")
-    public Collection<User> getAll() {
-        return this.userRepository.findAll();
+    public ResponseEntity<List<UserDto>> getAll() {
+        return new ResponseEntity<List<UserDto>>(userService.findAll(), HttpStatus.OK);
+    }
+    @GetMapping
+    public ResponseEntity<UserDto> getByEmail(@RequestParam(value = "email") String email) {
+        if(userService.findByEmail(email) != null) {
+            return new ResponseEntity<UserDto>(userService.findByEmail(email), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping
-    public User create(@RequestBody UserDto userDto) {
-        return this.userRepository.save(userDto.toEntity(this.passwordEncoder));
+    public ResponseEntity<UserDto> create(@RequestBody UserDto userDto) {
+        if(userService.findByEmail(userDto.getEmail()) == null) {
+            return new ResponseEntity<UserDto>(userService.create(userDto), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<UserDto> modify(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
+        if(userService.findById(id) != null) {
+            return new ResponseEntity<UserDto>(userService.modify(id, userDto), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     @DeleteMapping("{id}")
-    public void delete(@PathVariable("id") Long id) {
-        User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        this.userRepository.delete(user);
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        if(userService.findById(id) != null){
+            userService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

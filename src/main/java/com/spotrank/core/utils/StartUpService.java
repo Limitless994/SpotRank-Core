@@ -1,4 +1,4 @@
-package com.spotrank.core.services;
+package com.spotrank.core.utils;
 
 import com.spotrank.core.models.User;
 import com.spotrank.core.models.UserRole;
@@ -25,7 +25,7 @@ public class StartUpService {
 
     @PostConstruct
     public void initAdmin() {
-        if (this.userRepository.findByEmail(this.email).isEmpty()) {
+        if (this.userRepository.findByEmail(this.email) == null) {
             User adminUser = new User();
             adminUser.setEmail(this.email);
             adminUser.setName("Admin");

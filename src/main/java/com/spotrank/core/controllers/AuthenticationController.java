@@ -1,7 +1,7 @@
 package com.spotrank.core.controllers;
 
 import com.spotrank.core.dtos.AuthenticationDto;
-import com.spotrank.core.services.AuthenticationService;
+import com.spotrank.core.services.impl.AuthenticationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private AuthenticationServiceImpl authenticationService;
 
     @PostMapping
     public String login(@RequestBody AuthenticationDto authDto) {
