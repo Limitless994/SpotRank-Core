@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 @Getter
-@Table(name = "app_user")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +37,7 @@ public class User {
     @CollectionTable
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles = new HashSet<>(Collections.singletonList(UserRole.USER));
+
+    @OneToOne(mappedBy = "admin")
+    private Team team;
 }

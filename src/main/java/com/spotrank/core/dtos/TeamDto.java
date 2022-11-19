@@ -12,9 +12,9 @@ import java.util.Set;
 @Setter
 @Getter
 public class TeamDto {
-
+    private String id;
     private String name;
-
-    private Set<Long> users = new HashSet<>(0);
+    private String adminId;
+    private Set<Long> membersId = new HashSet<>(0);
 
 }

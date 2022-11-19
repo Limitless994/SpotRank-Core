@@ -1,16 +1,14 @@
 package com.spotrank.core.controllers;
 
 import com.spotrank.core.dtos.TeamDto;
-import com.spotrank.core.models.User;
-import com.spotrank.core.models.Team;
-import com.spotrank.core.repositories.TeamRepository;
-import com.spotrank.core.repositories.UserRepository;
+import com.spotrank.core.services.TeamService;
+import com.spotrank.core.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,48 +20,46 @@ public class TeamController {
     private static final Logger log = LogManager.getLogger(TeamController.class);
 
     @Autowired
-    private TeamRepository teamRepository;
+    private TeamService teamService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("{id}")
-    public Team getById(@PathVariable(name = "id") Long id) {
-        return this.teamRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public ResponseEntity<TeamDto> getById(@PathVariable(name = "id") Long id) {
+        return new ResponseEntity<>(this.teamService.findById(id), HttpStatus.OK);
     }
-
     @GetMapping
-    public Team getByName(@RequestParam("name") String name) {
-        return this.teamRepository.findByName(name).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public ResponseEntity<List<TeamDto>> getAll() {
+        return new ResponseEntity<>(this.teamService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    public Team create(@RequestBody TeamDto dto) {
-        List<User> users = this.userRepository.findAllById(dto.getUsers());
-        if (users.size() < dto.getUsers().size()) {
-            log.warn("Some users have not been added because they do not exist");
-        }
-        Team team = new Team();
-        team.setName(dto.getName());
-        team.setMembers(new HashSet<>(users));
-        return this.teamRepository.save(team);
-    }
-
-    @PatchMapping("{id}")
-    public Team addMembers(@PathVariable("id") Long id, @RequestBody List<Long> members) {
-        Team team = this.teamRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        List<User> users = this.userRepository.findAllById(members);
-        if (users.size() < members.size()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "One or more users were not found");
-        }
-        team.setMembers(new HashSet<>(users));
-        return this.teamRepository.save(team);
+    public ResponseEntity<TeamDto> create(@RequestBody TeamDto dto) {
+        return new ResponseEntity<>(this.teamService.create(dto), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        Team entity = this.teamRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        this.teamRepository.delete(entity);
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        if(teamService.existsById(id)){
+            this.teamService.delete(id);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("add")
+    public ResponseEntity<TeamDto> addMember(@RequestParam("id") Long id,@RequestParam("userId") Long userId) {
+        if(teamService.insertMember(id, userId))
+            return new ResponseEntity<>(teamService.findById(id), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(teamService.findById(id), HttpStatus.BAD_REQUEST);
+    }
+    @PutMapping("remove")
+    public ResponseEntity<TeamDto> removeMember(@RequestParam("id") Long id,@RequestParam("userId") Long userId) {
+        if(teamService.removeMember(id, userId))
+            return new ResponseEntity<>(teamService.findById(id), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(teamService.findById(id), HttpStatus.BAD_REQUEST);
     }
 }

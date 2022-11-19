@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 @Getter
+@Table(name = "teams")
 public class Team {
 
     @Id
@@ -21,6 +23,12 @@ public class Team {
     private Long id;
 
     private String name;
+
+    private Date creationDate;
+
+    @OneToOne
+    @JoinColumn(name = "admin_id", referencedColumnName = "id")
+    private User admin;
 
     @ManyToMany
     private Set<User> members = new HashSet<>(0);
