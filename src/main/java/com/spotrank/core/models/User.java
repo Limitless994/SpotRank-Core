@@ -40,4 +40,5 @@ public class User {
 
     @OneToOne(mappedBy = "admin")
     private Team team;
+
 }

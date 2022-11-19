@@ -5,6 +5,7 @@ import com.spotrank.core.mappers.UserMapper;
 import com.spotrank.core.models.User;
 import com.spotrank.core.repositories.UserRepository;
 import com.spotrank.core.services.UserService;
+import com.spotrank.core.services.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository repository;
+
+    @Autowired
+    WalletService walletService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -56,9 +60,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto dto) {
+
         User userToCreate = UserMapper.INSTANCE.toUserEntity(dto);
         userToCreate.setPassword(passwordEncoder.encode(userToCreate.getPassword()));
         userToCreate=repository.save(userToCreate);
+
+        walletService.create(userToCreate.getId(), userToCreate);
+
         return UserMapper.INSTANCE.toUserDTO(userToCreate);
 
     }
