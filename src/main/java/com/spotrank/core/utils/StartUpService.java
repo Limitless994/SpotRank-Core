@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 @Component
 @ConfigurationProperties(prefix = "admin")
@@ -25,10 +26,12 @@ public class StartUpService {
 
     @PostConstruct
     public void initAdmin() {
-        if (this.userRepository.findByEmail(this.email) == null) {
+        Optional<User> admin = this.userRepository.findByEmail(this.email);
+        if (!admin.isPresent()) {
             User adminUser = new User();
             adminUser.setEmail(this.email);
             adminUser.setName("Admin");
+            adminUser.setAge(28);
             adminUser.setSurname("Admin");
             adminUser.setPassword(encoder.encode(this.password));
             adminUser.getRoles().add(UserRole.ADMIN);
