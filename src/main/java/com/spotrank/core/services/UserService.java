@@ -1,7 +1,6 @@
 package com.spotrank.core.services;
 
 import com.spotrank.core.dtos.UserDto;
-import com.spotrank.core.models.User;
 
 import java.util.List;
 

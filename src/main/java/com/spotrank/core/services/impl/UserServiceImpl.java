@@ -6,13 +6,11 @@ import com.spotrank.core.models.User;
 import com.spotrank.core.repositories.UserRepository;
 import com.spotrank.core.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class UserServiceImpl implements UserService {

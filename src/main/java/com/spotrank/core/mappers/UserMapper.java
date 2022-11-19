@@ -3,11 +3,9 @@ package com.spotrank.core.mappers;
 import com.spotrank.core.dtos.UserDto;
 import com.spotrank.core.models.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mapper
 public interface UserMapper {

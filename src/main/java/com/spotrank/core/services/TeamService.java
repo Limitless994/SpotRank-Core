@@ -1,7 +1,6 @@
 package com.spotrank.core.services;
 
 import com.spotrank.core.dtos.TeamDto;
-import com.spotrank.core.dtos.UserDto;
 
 import java.util.List;
 

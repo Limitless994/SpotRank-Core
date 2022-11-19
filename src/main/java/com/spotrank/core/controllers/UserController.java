@@ -1,16 +1,12 @@
 package com.spotrank.core.controllers;
 
 import com.spotrank.core.dtos.UserDto;
-import com.spotrank.core.mappers.UserMapper;
-import com.spotrank.core.models.User;
-import com.spotrank.core.repositories.UserRepository;
 import com.spotrank.core.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.List;
