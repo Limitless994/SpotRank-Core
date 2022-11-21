@@ -12,6 +12,6 @@ public interface WalletService {
     WalletDto findById(Long id);
     boolean existsById(Long id);
     void delete(Long id);
-    WalletDto create(Long userId, User user);
+    WalletDto create(User user);
     WalletDto editBalance(Long id, int amount);
 }

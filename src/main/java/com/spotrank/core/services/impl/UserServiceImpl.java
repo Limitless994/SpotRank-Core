@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         userToCreate.setPassword(passwordEncoder.encode(userToCreate.getPassword()));
         userToCreate=repository.save(userToCreate);
 
-        walletService.create(userToCreate.getId(), userToCreate);
+        walletService.create(userToCreate);
 
         return UserMapper.INSTANCE.toUserDTO(userToCreate);
 

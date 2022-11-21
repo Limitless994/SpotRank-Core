@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,4 +42,6 @@ public class User {
     @OneToOne(mappedBy = "admin")
     private Team team;
 
+    @OneToMany(mappedBy="user")
+    private Set<Post> posts;
 }

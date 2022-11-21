@@ -44,8 +44,8 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public WalletDto create(Long userId, User user) {
-        if(repository.findByOwner(userId)== null){
+    public WalletDto create(User user) {
+        if(!repository.findByOwner(user).isPresent()){
             Wallet newWallet = new Wallet();
             newWallet.setBalance(0);
             newWallet.setOwner(user);
