@@ -37,7 +37,7 @@ public class StartUpService {
 
             adminUser.setEmail(this.email);
             adminUser.setName("Admin");
-            adminUser.setAge(28);
+            adminUser.setAge(30);
             adminUser.setSurname("Admin");
             adminUser.setPassword(encoder.encode(this.password));
             adminUser.getRoles().add(UserRole.ADMIN);

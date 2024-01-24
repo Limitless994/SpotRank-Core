@@ -1,9 +1,7 @@
 package com.spotrank.core.services.impl;
 
 import com.spotrank.core.dtos.PostDto;
-import com.spotrank.core.dtos.PostDto;
 import com.spotrank.core.mappers.PostMapper;
-import com.spotrank.core.mappers.TeamMapper;
 import com.spotrank.core.mappers.UserMapper;
 import com.spotrank.core.models.Post;
 import com.spotrank.core.repositories.PostRepository;
@@ -30,7 +28,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto findById(Long id) {
-        return PostMapper.INSTANCE.toPostDto(repository.findById(id).orElse(null));
+        return PostMapper.INSTANCE.toPostDTO(repository.findById(id).orElse(null));
     }
 
     @Override
@@ -50,6 +48,6 @@ public class PostServiceImpl implements PostService {
         postToSave.setUser(UserMapper.INSTANCE.toUserEntity(userService.findById(dto.getUserId())));
         postToSave.setCreationDate(new Date());
         postToSave = repository.save(postToSave);
-        return PostMapper.INSTANCE.toPostDto(postToSave);
+        return PostMapper.INSTANCE.toPostDTO(postToSave);
     }
 }
