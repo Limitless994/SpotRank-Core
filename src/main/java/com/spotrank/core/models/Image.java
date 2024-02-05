@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "image")
+@Table(name = "images")
 @Data
 @Builder
 @NoArgsConstructor
@@ -25,8 +25,8 @@ public class Image {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "image", unique = false, nullable = false, length = 100000)
-    private byte[] image;
+    @Column(name = "file", unique = false, nullable = false, length = 100000)
+    private byte[] file;
 
     @OneToOne
     @JoinColumn(name = "post_id", referencedColumnName = "id")

@@ -33,7 +33,7 @@ public class ImageServiceImpl implements ImageService {
                 .post(PostMapper.INSTANCE.toPostEntity(postService.findById(postId)))
                 .user(UserMapper.INSTANCE.toUserEntity(userService.findById(userId)))
                 .type(file.getContentType())
-                .image(ImageUtility.compressImage(file.getBytes())).build());
+                .file(ImageUtility.compressImage(file.getBytes())).build());
         return new ImageDto("Image uploaded successfully: " +
                         file.getOriginalFilename());
     }
@@ -44,12 +44,12 @@ public class ImageServiceImpl implements ImageService {
         return Image.builder()
                 .name(dbImage.get().getName())
                 .type(dbImage.get().getType())
-                .image(ImageUtility.decompressImage(dbImage.get().getImage())).build();
+                .file(ImageUtility.decompressImage(dbImage.get().getFile())).build();
     }
 
     @Override
     public byte[] getImage(String name) throws IOException {
         final Optional<Image> dbImage = repository.findByName(name);
-        return ImageUtility.decompressImage(dbImage.get().getImage());
+        return ImageUtility.decompressImage(dbImage.get().getFile());
     }
 }

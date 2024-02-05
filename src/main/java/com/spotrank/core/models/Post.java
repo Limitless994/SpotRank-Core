@@ -28,4 +28,8 @@ public class Post {
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
+    @OneToOne
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
+
     }
