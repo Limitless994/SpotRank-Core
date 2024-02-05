@@ -40,8 +40,7 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(new AuthorizationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), this.userRepository), UsernamePasswordAuthenticationFilter.class).authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/**").permitAll().anyRequest().authenticated();
         return http.build();
     }
 }
