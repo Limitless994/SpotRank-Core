@@ -1,14 +1,13 @@
 package com.spotrank.core.controllers;
 
 import com.spotrank.core.dtos.AuthenticationDto;
+import com.spotrank.core.dtos.UserAuthenticationResponseDto;
 import com.spotrank.core.services.impl.AuthenticationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("public/authentication")
 public class AuthenticationController {
 
@@ -16,7 +15,7 @@ public class AuthenticationController {
     private AuthenticationServiceImpl authenticationService;
 
     @PostMapping
-    public String login(@RequestBody AuthenticationDto authDto) {
+    public UserAuthenticationResponseDto login(@RequestBody AuthenticationDto authDto) {
         return this.authenticationService.login(authDto.getEmail(), authDto.getPassword());
     }
 }

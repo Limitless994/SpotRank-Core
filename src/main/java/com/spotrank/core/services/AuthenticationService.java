@@ -1,5 +1,7 @@
 package com.spotrank.core.services;
 
+import com.spotrank.core.dtos.UserAuthenticationResponseDto;
+
 public interface AuthenticationService {
-    public String login(String email, String password);
+    public UserAuthenticationResponseDto login(String email, String password);
 }

@@ -34,10 +34,10 @@ public class JwtProvider {
         }
     }
 
-    public static String createJwt(String subject, Map<String, Object> payloadClaims) {
+    public static String createJwt(String subject, Map<String, Object> payloadClaims, Integer expiration) {
         JWTCreator.Builder builder = JWT.create().withSubject(subject).withIssuer(issuer);
         final DateTime now = DateTime.now();
-        builder.withIssuedAt(now.toDate()).withExpiresAt(now.plusDays(1).toDate());
+        builder.withIssuedAt(now.toDate()).withExpiresAt(now.plusDays(expiration).toDate());
 
         if (payloadClaims.isEmpty()) {
             log.warn("You are building a JWT without header claims");

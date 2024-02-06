@@ -27,6 +27,7 @@ security:
   secret: chiavedacambiare
   prefix: 'Bearer '
   param: Authorization
+  token-expiration: 3
 
 admin:
   email: admin@test.com
