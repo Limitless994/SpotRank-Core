@@ -3,8 +3,6 @@ package com.spotrank.core.models;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -22,7 +20,8 @@ public class Spot {
     @JoinColumn(name = "city_id")
     private City city;
 
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Post> posts = new ArrayList<>();
+    @OneToOne(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ImageSpot thumbnail;
+
 
 }

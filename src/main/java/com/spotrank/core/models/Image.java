@@ -1,21 +1,13 @@
 package com.spotrank.core.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "images")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Image {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "entity_type", discriminatorType = DiscriminatorType.STRING)
+public abstract class Image {
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,11 +20,7 @@ public class Image {
     @Column(name = "file", unique = false, nullable = false, length = 100000)
     private byte[] file;
 
-    @OneToOne
-    @JoinColumn(name = "post_id", referencedColumnName = "id")
-    private Post post;
+    @Column(name = "entity_type", insertable = false, updatable = false)
+    private String entityType;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
 }

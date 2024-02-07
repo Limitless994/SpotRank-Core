@@ -4,6 +4,8 @@ import com.spotrank.core.mappers.PostMapper;
 import com.spotrank.core.mappers.UserMapper;
 import com.spotrank.core.models.Image;
 import com.spotrank.core.dtos.ImageDto;
+import com.spotrank.core.models.ImagePost;
+import com.spotrank.core.repositories.ImagePostRepository;
 import com.spotrank.core.repositories.ImageRepository;
 import com.spotrank.core.services.ImageService;
 import com.spotrank.core.services.PostService;
@@ -20,17 +22,31 @@ import java.util.Optional;
 public class ImageServiceImpl implements ImageService {
 
     @Autowired
-    ImageRepository repository;
+    ImagePostRepository repository;
     @Autowired
     PostService postService;
     @Autowired
     UserService userService;
+
     @Override
     public ImageDto upload(MultipartFile file, Long postId, Long userId) throws IOException {
+        return null;
+    }
 
-        repository.save(Image.builder()
+    @Override
+    public ImagePost getImageDetails(String name) throws IOException {
+        return null;
+    }
+
+    @Override
+    public byte[] getImage(String name) throws IOException {
+        return new byte[0];
+    }
+     /*   @Override
+    public ImageDto upload(MultipartFile file, Long postId, Long userId) throws IOException {
+
+     repository.save(ImagePost.builder()
                 .name(file.getOriginalFilename())
-                .post(PostMapper.INSTANCE.toPostEntity(postService.findById(postId)))
                 .user(UserMapper.INSTANCE.toUserEntity(userService.findById(userId)))
                 .type(file.getContentType())
                 .file(ImageUtility.compressImage(file.getBytes())).build());
@@ -38,10 +54,10 @@ public class ImageServiceImpl implements ImageService {
                         file.getOriginalFilename());
     }
 
-    @Override
-    public Image getImageDetails(String name) throws IOException {
-        final Optional<Image> dbImage = repository.findByName(name);
-        return Image.builder()
+   @Override
+    public ImagePost getImageDetails(String name) throws IOException {
+        final Optional<ImagePost> dbImage = repository.findByName(name);
+        return ImagePost.builder()
                 .name(dbImage.get().getName())
                 .type(dbImage.get().getType())
                 .file(ImageUtility.decompressImage(dbImage.get().getFile())).build();
@@ -49,7 +65,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public byte[] getImage(String name) throws IOException {
-        final Optional<Image> dbImage = repository.findByName(name);
+        final Optional<ImagePost> dbImage = repository.findByName(name);
         return ImageUtility.decompressImage(dbImage.get().getFile());
-    }
+    }*/
 }

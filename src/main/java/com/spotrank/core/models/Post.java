@@ -28,9 +28,8 @@ public class Post {
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "image_id", referencedColumnName = "id")
-    private Image image;
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ImagePost imagePost;
 
     @ManyToOne
     @JoinColumn(name = "spot_id", nullable = false)
