@@ -1,5 +1,7 @@
 package com.spotrank.core.controllers;
 
+import com.spotrank.core.dtos.CityDTO;
+import com.spotrank.core.dtos.CityInnerDTO;
 import com.spotrank.core.dtos.CountryDTO;
 import com.spotrank.core.services.CountryService;
 import lombok.AllArgsConstructor;
@@ -43,4 +45,10 @@ import java.util.List;
             countryService.delete(countryId);
             return ResponseEntity.noContent().build();
         }
+
+    @GetMapping("/{countryId}/cities")
+    public ResponseEntity<List<CityInnerDTO>> getCitiesByCountry(@PathVariable Long countryId) {
+        List<CityInnerDTO> cities = countryService.getCitiesByCountry(countryId);
+        return ResponseEntity.ok(cities);
+    }
     }

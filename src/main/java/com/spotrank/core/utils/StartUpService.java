@@ -1,9 +1,7 @@
 package com.spotrank.core.utils;
 
-import com.spotrank.core.models.Country;
-import com.spotrank.core.models.User;
-import com.spotrank.core.models.UserRole;
-import com.spotrank.core.models.Wallet;
+import com.spotrank.core.models.*;
+import com.spotrank.core.repositories.CityRepository;
 import com.spotrank.core.repositories.CountryRepository;
 import com.spotrank.core.repositories.UserRepository;
 import com.spotrank.core.repositories.WalletRepository;
@@ -16,6 +14,7 @@ import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Component
@@ -30,6 +29,8 @@ public class StartUpService {
     private PasswordEncoder encoder;
     @Autowired
     private CountryRepository countryRepository;
+    @Autowired
+    private CityRepository cityRepository;
     private String email;
     private String password;
 
@@ -52,15 +53,32 @@ public class StartUpService {
         }
     }
     @PostConstruct
-    public void initCountries() {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/countries.csv")))) {            String content;
-            while ((content = reader.readLine()) != null) {
-                countryRepository.save(new Country(null,content));
+    public void initCountriesAndCities() {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/cities.csv")))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Dividi la riga in un array di stringhe usando la virgola come delimitatore
+                String[] elements = line.split(",");
+
+                // Il primo elemento è il nome del paese
+                String countryName = elements[0].trim();
+
+                // Crea e salva l'oggetto Country
+                Country country = new Country(null, countryName, new ArrayList<>());
+                countryRepository.save(country);
+
+                // Salva le città associate al paese
+                for (int i = 1; i < elements.length; i++) {
+                    String cityName = elements[i].trim();
+
+                    // Crea e salva l'oggetto City associato al Country
+                    City city = new City(null, cityName, country);
+                    cityRepository.save(city);
+                }
             }
         } catch (IOException e) {
-            System.out.println("Impossibile inizializzare countries");
+            System.out.println("Impossibile inizializzare countries e cities");
         }
-
     }
     public void setEmail(String email) {
         this.email = email;

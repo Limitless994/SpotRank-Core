@@ -1,11 +1,13 @@
 package com.spotrank.core.services.impl;
 
+import com.spotrank.core.dtos.CityInnerDTO;
 import com.spotrank.core.dtos.CountryDTO;
+import com.spotrank.core.mappers.CityMapper;
 import com.spotrank.core.mappers.CountryMapper;
+import com.spotrank.core.models.City;
 import com.spotrank.core.models.Country;
 import com.spotrank.core.repositories.CountryRepository;
 import com.spotrank.core.services.CountryService;
-import com.spotrank.core.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +21,6 @@ public class CountryServiceImpl implements CountryService {
 
     @Autowired
     CountryRepository repository;
-    @Autowired
-    UserService countryService;
 
     @Override
     public List<CountryDTO> findAll() {
@@ -56,5 +56,13 @@ public class CountryServiceImpl implements CountryService {
         assert old != null;
         old.setName(dto.getName());
         return CountryMapper.INSTANCE.toCountryDTO(repository.save(old));
+    }
+
+    @Override
+    public List<CityInnerDTO> getCitiesByCountry(Long countryId) {
+        Country country = repository.findById(countryId).orElse(null);
+        assert country != null;
+        List<City> cities = country.getCities();
+        return CityMapper.INSTANCE.toCityInnerDTOList(cities);
     }
 }

@@ -1,0 +1,25 @@
+package com.spotrank.core.models;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "cities")
+public class City {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long cityId;
+
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
+
+}
