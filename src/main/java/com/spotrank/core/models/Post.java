@@ -32,4 +32,8 @@ public class Post {
     @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
 
-    }
+    @ManyToOne
+    @JoinColumn(name = "spot_id", nullable = false)
+    private Spot spot;
+
+}

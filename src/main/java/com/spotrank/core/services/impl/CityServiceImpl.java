@@ -5,7 +5,6 @@ import com.spotrank.core.mappers.CityMapper;
 import com.spotrank.core.models.City;
 import com.spotrank.core.repositories.CityRepository;
 import com.spotrank.core.services.CityService;
-import com.spotrank.core.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,6 @@ public class CityServiceImpl implements CityService {
 
     @Autowired
     CityRepository repository;
-    @Autowired
-    UserService CityService;
 
     @Override
     public List<CityDTO> findAll() {
