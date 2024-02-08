@@ -2,35 +2,47 @@ package com.spotrank.core.controllers;
 
 
 import com.spotrank.core.models.Image;
-import com.spotrank.core.dtos.ImageDto;
 import com.spotrank.core.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
-@CrossOrigin()
+@RequestMapping("/images")
 public class ImageController {
-
     @Autowired
-    ImageService imageService;
+    private ImageService imageService;
 
-    @PostMapping("/upload/image")
-    public ResponseEntity<ImageDto> uplaodImage(@RequestParam("image") MultipartFile file, Long postId, Long userId) throws IOException {
-        return new ResponseEntity<>(imageService.upload(file, postId, userId), HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<Image> getImageById(@PathVariable Long id) {
+        Optional<Image> image = imageService.getImageById(id);
+        return image.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping(path = {"/get/image/info/{name}"})
-    public Image getImageDetails(@PathVariable("name") String name) throws IOException {
-        return imageService.getImageDetails(name);
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Image> getImageByName(@PathVariable String name) {
+        Optional<Image> image = imageService.getImageByName(name);
+        return image.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping(path = {"/get/image/{name}"})
-    public ResponseEntity<byte[]> getImage(@PathVariable("name") String name) throws IOException {
-        return new ResponseEntity<>(imageService.getImage(name), HttpStatus.OK);
+    @GetMapping("/all")
+    public ResponseEntity<List<Image>> getAllImages() {
+        List<Image> images = imageService.getAllImages();
+        return ResponseEntity.ok(images);
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<Void> saveImage(@RequestBody Image image) {
+        imageService.saveImage(image);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteImage(@PathVariable Long id) {
+        imageService.deleteImage(id);
+        return ResponseEntity.ok().build();
     }
 }

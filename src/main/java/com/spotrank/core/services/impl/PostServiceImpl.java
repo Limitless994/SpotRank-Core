@@ -2,10 +2,14 @@ package com.spotrank.core.services.impl;
 
 import com.spotrank.core.dtos.PostDto;
 import com.spotrank.core.mappers.PostMapper;
+import com.spotrank.core.mappers.SpotMapper;
 import com.spotrank.core.mappers.UserMapper;
+import com.spotrank.core.models.Image;
 import com.spotrank.core.models.Post;
 import com.spotrank.core.repositories.PostRepository;
+import com.spotrank.core.services.ImageService;
 import com.spotrank.core.services.PostService;
+import com.spotrank.core.services.SpotService;
 import com.spotrank.core.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +24,11 @@ public class PostServiceImpl implements PostService {
     PostRepository repository;
     @Autowired
     UserService userService;
+    @Autowired
+    SpotService spotService;
+    @Autowired
+    ImageService imageService;
+
 
     @Override
     public List<PostDto> findAll() {
@@ -47,7 +56,12 @@ public class PostServiceImpl implements PostService {
         Post postToSave = PostMapper.INSTANCE.toPostEntity(dto);
         postToSave.setUser(UserMapper.INSTANCE.toUserEntity(userService.findById(dto.getUserId())));
         postToSave.setCreationDate(new Date());
+        postToSave.setSpot(SpotMapper.INSTANCE.toSpotEntity(spotService.findById(dto.getSpotId())));
+        Image imageToSave = imageService.saveImage(dto.getImage());
+        postToSave.setImage(imageToSave);
         postToSave = repository.save(postToSave);
+        imageToSave.setParentId(postToSave.getId());
+        imageService.saveImage(imageToSave);
         return PostMapper.INSTANCE.toPostDTO(postToSave);
     }
 }

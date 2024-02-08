@@ -20,8 +20,8 @@ public class Spot {
     @JoinColumn(name = "city_id")
     private City city;
 
-    @OneToOne(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ImageSpot thumbnail;
+    @OneToOne
+    private Image thumbnail;
 
 
 }

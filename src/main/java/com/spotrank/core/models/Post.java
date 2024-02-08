@@ -7,8 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -28,8 +26,8 @@ public class Post {
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
-    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ImagePost imagePost;
+    @OneToOne
+    private Image image;
 
     @ManyToOne
     @JoinColumn(name = "spot_id", nullable = false)

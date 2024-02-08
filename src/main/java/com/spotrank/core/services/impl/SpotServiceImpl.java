@@ -1,9 +1,13 @@
 package com.spotrank.core.services.impl;
 
 import com.spotrank.core.dtos.SpotDTO;
+import com.spotrank.core.mappers.CityMapper;
 import com.spotrank.core.mappers.SpotMapper;
+import com.spotrank.core.models.Image;
 import com.spotrank.core.models.Spot;
 import com.spotrank.core.repositories.SpotRepository;
+import com.spotrank.core.services.CityService;
+import com.spotrank.core.services.ImageService;
 import com.spotrank.core.services.SpotService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,10 @@ public class SpotServiceImpl implements SpotService {
 
     @Autowired
     SpotRepository repository;
-
+    @Autowired
+    CityService cityService;
+    @Autowired
+    ImageService imageService;
     @Override
     public List<SpotDTO> findAll() {
         return SpotMapper.INSTANCE.toSpotDTOList(repository.findAll());
@@ -42,9 +49,14 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     public SpotDTO create(SpotDTO dto) {
-        Spot SpotToSave = SpotMapper.INSTANCE.toSpotEntity(dto);
-        SpotToSave=repository.save(SpotToSave);
-        return SpotMapper.INSTANCE.toSpotDTO(SpotToSave);
+        Spot spotToSave = SpotMapper.INSTANCE.toSpotEntity(dto);
+        spotToSave.setCity(CityMapper.INSTANCE.toCityEntity(cityService.findById(dto.getCityId())));
+        Image imageToSave = imageService.saveImage(dto.getThumbnail());
+        spotToSave.setThumbnail(dto.getThumbnail());
+        spotToSave=repository.save(spotToSave);
+        imageToSave.setParentId(spotToSave.getSpotId());
+        imageService.saveImage(imageToSave);
+        return SpotMapper.INSTANCE.toSpotDTO(spotToSave);
     }
 
     @Override

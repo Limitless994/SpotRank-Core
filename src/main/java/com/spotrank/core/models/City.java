@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cityId;
+    private Long id;
 
     private String name;
 
